@@ -1,48 +1,58 @@
 from z3 import * #import the z3 solver
 
-slots = 3
+#INPUTS
 
-x11 = Bool("x11")
-x12 = Bool("x12")
-x13 = Bool("x13")
+#Fazendo inputs genericos
+cursos = int(input("Numero de Minicursos: "))
+slots = int(input("Quantos slots serão disponibilizados? "))
 
-x21 = Bool("x21")
-x22 = Bool("x22")
-x23 = Bool("x23")
+p = []
 
-x31 = Bool("x31")
-x32 = Bool("x32")
-x33 = Bool("x33")
+while True:
+    entrada = input("Digite dois valores inteiros separados por um espaço (ou 'sair' para terminar): ")
+    if entrada.lower() == 'sair':
+        break
+    valores_entrada = entrada.split()
+    if len(valores_entrada) != 2:
+        print("Por favor, insira dois valores inteiros separados por um espaço.")
+        continue
+    try:
+        valor1 = int(valores_entrada[0])
+        valor2 = int(valores_entrada[1])
+        p.append([valor1, valor2])
+    except ValueError:
+        print("Entrada inválida. Certifique-se de inserir números inteiros.")
 
-x41 = Bool("x41")
-x42 = Bool("x42")
-x43 = Bool("x43")
+def create_grid(slots, cursos):
+    solver = Solver()
 
-grid_courses = [[x11, x21, x31, x41],
-              [x12, x22, x32, x42],
-              [x13, x23, x33, x43]]
-# As linhas são os horarios e as colunas são os cursos.
+    grid = [[Bool(f'x{j}{i}') for j in range(1, cursos + 1)] for i in range(1, slots + 1)]
+    
+    for row in grid:
+      solver.add(row)
 
+    return grid
 
-#Fazendo um map para facilitar buscar os valores depois
-atomic_map = {
-    (1, 1): x11, (2, 1): x21, (3, 1): x31, (4, 1): x41,
-    (1, 2): x12, (2, 2): x22, (3, 2): x32, (4, 2): x42,
-    (1, 3): x13, (2, 3): x23, (3, 3): x33, (4, 3): x43,
-}
+def create_atomic_map(grid):
+    atomic_map = {}
+    num_rows = len(grid)
+    num_cols = len(grid[0])
 
-p = [[1,2],
-     [2,3],
-     [2,4],
-     [3,4]]
-# P são os pares de horários que tem uma pessoa matriculada.
+    for j in range(num_rows):
+        for i in range(num_cols):
+            atomic_map[(i+1, j+1)] = grid[j][i]
+
+    return atomic_map
+
+grid_courses = create_grid(slots, cursos)
+atomic_map = create_atomic_map(grid_courses)
 
 def get_atomic_pair(course1, course2, slot):
   c1 = atomic_map.get((course1, slot+1), None)
   c2 = atomic_map.get((course2, slot+1), None)
   return c1, c2
 
-
+#FUNÇÃO QUE CRIA A RESTRIÇÃO: Minicursos com inscrições em comum não podem ser ofertados no mesmo slot.
 atomicas = []
 
 for i in range(len(p)): #len(p) equivale ao tamanho da lista de Pares.
@@ -64,7 +74,7 @@ final_restriction_1 = and_restrictions
 def get_atomic(course, slot):
   return atomic_map.get(course, slot)
 
-
+#FUNÇÃO QUE CRIA A RESTRIÇÃO: Cada minicurso deve ser ofertado em pelo menos um slot.
 #O codigo abaixo gera uma lista de resultados separados por OU lógico, como na primeira parte da nossa restrição.
 aux_list = []
 or_restriction = []
@@ -77,8 +87,8 @@ for i in range(len(grid_courses[0])):
   aux_list.clear()
     
 
+#FUNÇÃO QUE CRIA A RESTRIÇÃO: Cada minicurso deve ser ofertado em no máximo um slot.
 #O codigo abaixo gera uma lista de resultados como na segunda parte da nossa restrição.
-
 not_and_restriction = []
 aux_list = []
 
@@ -97,7 +107,7 @@ for i in range(len(aux_list)):
   for j in range(len(aux_list[0])):
     not_and_restriction.append(Not(And(aux_list[i][j])))
 
-
+# JUNTANDO AS DUAS PARTES DA SEGUNDA RESTRIÇÃO
 and_restriction = []
 final_restriction_2 = []
 
