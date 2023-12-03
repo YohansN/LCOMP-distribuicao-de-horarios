@@ -124,6 +124,26 @@ r = s.check () # check satisfiability
 if r == sat:
   print ("SATISFIABLE")
   m = s.model() # read model (o modelo é uma valoração na qual a fórmula é verdadeira)
-  print(m)
+  #print(m)
 else:
   print ("UNSATISFIABLE")
+
+#FORMATANDO OUTPUT
+true_valuations = []
+for decl in m.decls():
+  val = m[decl]
+  if(val == True):
+    true_valuations.append(decl.name())
+true_valuations.sort()
+
+output_formated_list = []
+true_valuations_output_list = []
+
+for i in range(len(true_valuations)):
+  output_formated_list.append(true_valuations[i][:1] + true_valuations[i][2:])
+
+for i in range(len(output_formated_list)):
+  true_valuations_output_list.append(output_formated_list[i].replace("x", "s"))
+
+for i in range(len(true_valuations_output_list)):
+  print(f"{i+1} {true_valuations_output_list[i]}")
