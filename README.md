@@ -67,10 +67,10 @@ definido no terceiro slot. Seu programa deve funcionar para qualquer entrada que
 
 # Saída:
 
-1 s1
-2 s3
-3 s1
-4 s2
+1 s1 <br>
+2 s3 <br>
+3 s1 <br>
+4 s2 <br>
 
 
 
