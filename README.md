@@ -4,6 +4,11 @@ Cadeira: Lógica para Computação
 
 Professor: Thiago Alves
 
+Ferramentas utilizadas:
+- Python 3
+- Google Colab: https://colab.research.google.com/drive/1SOJfp1j5Hcr832wRcZXnn6yvhfZpEBJG?usp=sharing
+- Z3
+- Visual Studio Code
 ---
 
 
@@ -44,10 +49,10 @@ definido no terceiro slot. Seu programa deve funcionar para qualquer entrada que
 
 #### Minicursos:
 
-1 HTML
-2 PHP
-3 MySQL
-4 Swift
+1 HTML <br>
+2 PHP <br>
+3 MySQL <br>
+4 Swift <br>
 
 #### Slots:
 
@@ -55,10 +60,10 @@ definido no terceiro slot. Seu programa deve funcionar para qualquer entrada que
 
 #### Pares de minicursos com inscrições em comum:
 
-1 2
-2 3
-2 4
-3 4
+1 2 <br>
+2 3 <br>
+2 4 <br>
+3 4 <br>
 
 # Saída:
 
