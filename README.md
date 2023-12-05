@@ -10,7 +10,8 @@ Ferramentas utilizadas:
 - Z3
 - Visual Studio Code
 
-*Observação*: O código inicial comitado neste repositório foi feito primeiramente na plataforma "Google Colab" e, após seu devido funcionamento, o código foi acoplado em um arquivo e transportado para esse projeto. Para entender a lógica de resolução do problema pensada em cada parte do código recomendo verificar o link do projeto no colab. Link para o projeto no Google Colab: https://colab.research.google.com/drive/1SOJfp1j5Hcr832wRcZXnn6yvhfZpEBJG?usp=sharing
+**Observação**: O código inicial comitado neste repositório foi feito primeiramente na plataforma "Google Colab" e, após seu devido funcionamento, o código foi acoplado em um arquivo e transportado para esse projeto. Para entender a lógica de resolução do problema pensada em cada parte do código recomendo verificar o link do projeto no colab. Link para o projeto no Google Colab: https://colab.research.google.com/drive/1SOJfp1j5Hcr832wRcZXnn6yvhfZpEBJG?usp=sharing
+
 ---
 
 ## Explicação do problema
