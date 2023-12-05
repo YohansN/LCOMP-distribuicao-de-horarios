@@ -54,8 +54,8 @@ class SatisfiabilityMethods:
     def get_atomic(self, atomic_map, course, slot):
         return atomic_map.get((course, slot), None)
 
-#FUNÇÃO QUE CRIA A RESTRIÇÃO: Minicursos com inscrições em comum não podem ser ofertados no mesmo slot.
-    def first_restriction(self, atomic_map, p, slots):
+    #MÉTODO QUE CRIA A RESTRIÇÃO: Minicursos com inscrições em comum não podem ser ofertados no mesmo slot.
+    def create_first_restriction(self, atomic_map, p, slots):
         
         atomicas = []
         for i in range(len(p)): #len(p) equivale ao tamanho da lista de Pares.
@@ -70,24 +70,22 @@ class SatisfiabilityMethods:
         first_restriction.append(And(not_and_restrictions))
         return first_restriction
     
-#FUNÇÃO QUE CRIA A RESTRIÇÃO: Cada minicurso deve ser ofertado em pelo menos um slot.
-    def second_restriction(self, grid_courses, slots, atomic_map):
+    #MÉTODO QUE CRIA A RESTRIÇÃO: Cada minicurso deve ser ofertado em pelo menos um slot.
+    def create_second_restriction(self, grid_courses, slots, atomic_map):
         aux_list = []
-        or_restriction = []
+        second_restriction = []
 
         for i in range(len(grid_courses[0])):
             for j in range(slots):
                 aux_list.append(self.get_atomic(atomic_map, i+1, j+1))
-            or_restriction.append(Or(aux_list)) #Adiciona as formulas na lista com um "V" (ou) entre elas.
+            second_restriction.append(Or(aux_list)) #Adiciona as formulas na lista com um "V" (ou) entre elas.
             aux_list.clear()
 
-        return or_restriction
+        return second_restriction
 
-#FUNÇÃO QUE CRIA A RESTRIÇÃO: Cada minicurso deve ser ofertado em no máximo um slot.
-    def third_restriction(self, grid_courses):
-        not_and_restriction = []
+    #MÉTODO QUE CRIA A RESTRIÇÃO: Cada minicurso deve ser ofertado em no máximo um slot.
+    def create_third_restriction(self, grid_courses):        
         aux_list = []
-
         num_colunas = len(grid_courses[0])
 
         for coluna in range(num_colunas):
@@ -97,34 +95,29 @@ class SatisfiabilityMethods:
                     combinations.append((grid_courses[i][coluna], grid_courses[j][coluna]))
             aux_list.append(combinations)
 
+        third_restriction = []
         for i in range(len(aux_list)):
             for j in range(len(aux_list[0])):
-                not_and_restriction.append(Not(And(aux_list[i][j])))
+                third_restriction.append(Not(And(aux_list[i][j])))
 
-        return not_and_restriction
+        return third_restriction
     
-    def merging_restrictions(self, or_restriction, not_and_restriction):
-        and_restriction = []
-        second_restriction = []
-
-        and_restriction.append(And(or_restriction))
-        and_restriction.append(And(not_and_restriction))
-
-        second_restriction.append(And(and_restriction))
-        return second_restriction
     
-    def check_sat(self, first_restriction, second_restriction):
-        s = Solver() # allocate solver to theck satisfiability
-        s.add(first_restriction) # add a formula to the solver
-        s.add(second_restriction) # add a formula to the solver
-        r = s.check () # check satisfiability
+    def check_sat(self, first_restriction, second_restriction, third_restriction):
+        s = Solver()
+        s.add(first_restriction)
+        s.add(second_restriction)
+        s.add(third_restriction)
+        r = s.check ()
         if r == sat:
             print ("SATISFIABLE")
-            m = s.model() # read model (o modelo é uma valoração na qual a fórmula é verdadeira)
+            m = s.model()
+            self.formated_output(m)
             #print(m)
         else:
             print ("UNSATISFIABLE")
-        
+    
+    def formated_output(self, m):
         #FORMATANDO OUTPUT
         true_valuations = []
         for decl in m.decls():
@@ -144,3 +137,17 @@ class SatisfiabilityMethods:
 
         for i in range(len(true_valuations_output_list)):
             print(f"{i+1} {true_valuations_output_list[i]}")
+
+    def solution(self):
+        #setup
+        cursos, slots, p = self.initialize_inputs()
+        grid_courses = self.create_grid(cursos, slots)
+        atomic_map = self.create_atomic_map(grid_courses)
+
+        #criando formulas de restrição
+        first_restriction = self.create_first_restriction(atomic_map, p, slots)
+        second_restriction = self.create_second_restriction(grid_courses, slots, atomic_map)
+        third_restriction = self.create_third_restriction(grid_courses)
+
+        #Verificando satisfatibilidade e dando output com resultado
+        self.check_sat(first_restriction, second_restriction, third_restriction)
