@@ -6,12 +6,14 @@ Professor: Thiago Alves
 
 Ferramentas utilizadas:
 - Python 3
-- Google Colab: https://colab.research.google.com/drive/1SOJfp1j5Hcr832wRcZXnn6yvhfZpEBJG?usp=sharing
+- Google Colab
 - Z3
 - Visual Studio Code
+
+*Observação*: O código inicial comitado neste repositório foi feito primeiramente na plataforma "Google Colab" e, após seu devido funcionamento, o código foi acoplado em um arquivo e transportado para esse projeto. Para entender a lógica de resolução do problema pensada em cada parte do código recomendo verificar o link do projeto no colab. Link para o projeto no Google Colab: https://colab.research.google.com/drive/1SOJfp1j5Hcr832wRcZXnn6yvhfZpEBJG?usp=sharing
 ---
 
-
+## Explicação do problema
 
 Um evento vai oferecer k minicursos de uma hora de duração cada. Dessa forma, os organizadores do
 evento vão definir os horários em slots de uma hora de duração, por exemplo, 8:00-9:00, 9:00-10:00, 10:00-
